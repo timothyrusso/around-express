@@ -19,7 +19,7 @@ const getProfile = (req, res) =>
       }
       if (!user) {
         return res.status(404).send({
-          message: `There is no user with the id ${req.params.id}`
+          message: 'User ID not found'
         })
       }
 

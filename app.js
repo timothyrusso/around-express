@@ -8,7 +8,7 @@ const { PORT = 3000 } = process.env;
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
 app.use((req, res, next) => {
-  res.status(404).send({ message: 'Sorry can\'t find that!' })
+  res.status(404).send({ message: 'Requested resource not found' })
 });
 
 app.listen(PORT, () => {
