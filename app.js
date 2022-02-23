@@ -7,6 +7,9 @@ const { PORT = 3000 } = process.env;
 
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
+app.use((req, res, next) => {
+  res.status(404).send({ message: 'Sorry can\'t find that!' })
+});
 
 app.listen(PORT, () => {
   console.log('The server is started');
