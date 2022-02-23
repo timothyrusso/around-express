@@ -10,11 +10,6 @@ const getUsers = (req, res) => getDataFromFile(dataPath)
 const getProfile = (req, res) => getDataFromFile(dataPath)
   .then((users) => users.find((user) => user._id === req.params.id))
   .then((user) => {
-    if (!Number.isNaN(req.params.id)) {
-      return res
-        .status(400)
-        .send({ message: 'The user id must be a string' });
-    }
     if (!user) {
       return res.status(404).send({
         message: 'User ID not found',
