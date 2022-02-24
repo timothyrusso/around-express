@@ -1,10 +1,12 @@
 const express = require('express');
+const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
 const app = express();
 const { PORT = 3000 } = process.env;
 
+app.use(helmet());
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
 app.use((req, res, next) => {
@@ -12,5 +14,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('The server is started');
+  console.log(`App listening on port ${PORT}`);
 });
