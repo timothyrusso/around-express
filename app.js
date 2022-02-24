@@ -9,10 +9,10 @@ const { PORT = 3000 } = process.env;
 app.use(helmet());
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
 });
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+  console.log(`App listening on port ${PORT}`); // eslint-disable-line no-console
 });
