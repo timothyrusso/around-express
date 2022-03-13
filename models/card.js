@@ -22,15 +22,16 @@ const cardSchema = new mongoose.Schema({
     ref: 'user',
     required: true
   },
-  // avatar: {
-  //   type: String,
-  //   required: true,
-  //   validate: {
-  //     validator: function (v) {
-  //       return /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(v);
-  //     }
-  //   }
-  // }
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+    default: []
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model('card', cardSchema);
