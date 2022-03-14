@@ -11,7 +11,6 @@ const getProfile = (req, res) => {
     .catch(err => res.status(500).send(err));
 }
 
-
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
@@ -19,4 +18,19 @@ const createUser = (req, res) => {
     .catch((err) => res.status(500).send(err));
 }
 
-module.exports = { getUsers, getProfile, createUser };
+const updateProfile = (req, res) => {
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    // pass the options object:
+    {
+      new: true, // the then handler receives the updated entry as input
+      runValidators: true // the data will be validated before the update
+    }
+  )
+    .then(user => res.status(200).send(user))
+    .catch(err => res.status(500).send(err));
+}
+
+module.exports = { getUsers, getProfile, createUser, updateProfile };

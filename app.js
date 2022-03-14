@@ -14,6 +14,8 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
 });
 
 app.use(express.json()) // To parse the incoming requests with JSON payloads
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
 app.use(helmet());
 app.use((req, res, next) => {
   req.user = {
@@ -22,12 +24,13 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
+
 app.use((req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
 });
-
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`); // eslint-disable-line no-console
