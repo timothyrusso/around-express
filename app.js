@@ -13,6 +13,7 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
   // useFindAndModify: false
 });
 
+app.use(express.json()) // To parse the incoming requests with JSON payloads
 app.use(helmet());
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
