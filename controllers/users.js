@@ -15,7 +15,7 @@ const getProfile = (req, res) => {
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((users) => res.status(201).send(users))
+    .then((user) => res.status(201).send(user))
     .catch((err) => res.status(500).send(err));
 }
 
