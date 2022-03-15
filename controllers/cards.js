@@ -11,6 +11,12 @@ const createCard = (req, res) => {
     .catch((err) => res.status(500).send(err));
 }
 
+const deleteCard = (req, res) => {
+  Card.findByIdAndRemove(req.params.cardId)
+    .then(card => res.send(card))
+    .catch(err => res.status(500).send(err));
+}
+
 const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
@@ -31,4 +37,4 @@ const dislikeCard = (req, res) => {
     .catch((err) => res.status(500).send(err));
 }
 
-module.exports = { getCards, createCard, likeCard, dislikeCard };
+module.exports = { getCards, createCard, deleteCard, likeCard, dislikeCard };

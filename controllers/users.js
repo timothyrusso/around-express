@@ -25,8 +25,7 @@ const updateProfile = (req, res) => {
     { name, about },
     // pass the options object:
     {
-      new: true, // the then handler receives the updated entry as input
-      runValidators: true // the data will be validated before the update
+      new: true // the then handler receives the updated entry as input
     }
   )
     .then(user => res.status(200).send(user))
@@ -38,10 +37,8 @@ const updateAvatar = (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    // pass the options object:
     {
-      new: true, // the then handler receives the updated entry as input
-      runValidators: true // the data will be validated before the update
+      new: true
     }
   )
     .then(user => res.status(200).send(user))
