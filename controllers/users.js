@@ -33,4 +33,19 @@ const updateProfile = (req, res) => {
     .catch(err => res.status(500).send(err));
 }
 
-module.exports = { getUsers, getProfile, createUser, updateProfile };
+const updateAvatar = (req, res) => {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    // pass the options object:
+    {
+      new: true, // the then handler receives the updated entry as input
+      runValidators: true // the data will be validated before the update
+    }
+  )
+    .then(user => res.status(200).send(user))
+    .catch(err => res.status(500).send(err));
+}
+
+module.exports = { getUsers, getProfile, createUser, updateProfile, updateAvatar };
