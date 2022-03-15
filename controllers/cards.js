@@ -11,6 +11,24 @@ const createCard = (req, res) => {
     .catch((err) => res.status(500).send(err));
 }
 
+const likeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
+    { new: true },
+  )
+    .then((likes) => res.status(200).send(likes))
+    .catch((err) => res.status(500).send(err));
+}
 
+const dislikeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } }, // remove _id from the array
+    { new: true },
+  )
+    .then((likes) => res.status(200).send(likes))
+    .catch((err) => res.status(500).send(err));
+}
 
-module.exports = { getCards, createCard };
+module.exports = { getCards, createCard, likeCard, dislikeCard };
