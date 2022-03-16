@@ -4,12 +4,14 @@ const {
 } = require('../utils/constants');
 
 const getCards = (req, res) => Card.find({})
+  .populate('owner')
   .then((cards) => res.status(REQUEST_SUCCEDED).send(cards))
   .catch((err) => res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` }));
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
+    .populate('owner')
     .then((card) => res.status(RESOURCE_CREATED).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -22,12 +24,18 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
+    .orFail(() => {
+      const error = new Error('No card found with that id');
+      error.statusCode = NOT_FOUND;
+      throw error;
+    })
+    .populate('owner')
     .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
       } else if (err.statusCode === NOT_FOUND) {
-        res.status(NOT_FOUND).send({ message: `Id not found: ${err}` });
+        res.status(NOT_FOUND).send({ message: err.message });
       } else {
         res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
@@ -45,6 +53,7 @@ const likeCard = (req, res) => {
       error.statusCode = NOT_FOUND;
       throw error;
     })
+    .populate('owner')
     .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -68,6 +77,7 @@ const dislikeCard = (req, res) => {
       error.statusCode = NOT_FOUND;
       throw error;
     })
+    .populate('owner')
     .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
