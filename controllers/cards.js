@@ -1,36 +1,38 @@
 const Card = require('../models/card');
-const { REQUEST_SUCCEDED, RESOURCE_CREATED, NOT_FOUND, INVALID_DATA, INTERNAL_SERVER_ERROR } = require('../utils/constants');
+const {
+  REQUEST_SUCCEDED, RESOURCE_CREATED, NOT_FOUND, INVALID_DATA, INTERNAL_SERVER_ERROR,
+} = require('../utils/constants');
 
 const getCards = (req, res) => Card.find({})
   .then((cards) => res.status(REQUEST_SUCCEDED).send(cards))
-  .catch(err => res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` }));
+  .catch((err) => res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` }));
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(RESOURCE_CREATED).send(card))
-    .catch(err => {
+    .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(INVALID_DATA).send({ message: `${Object.values(err.errors).map((errors) => errors.message).join(', ')}` })
+        res.status(INVALID_DATA).send({ message: `${Object.values(err.errors).map((errors) => errors.message).join(', ')}` });
       } else {
-        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
-    })
-}
+    });
+};
 
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }) })
+    .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` })
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
       } else if (err.statusCode === NOT_FOUND) {
-        res.status(NOT_FOUND).send({ message: `Id not found: ${err}` })
+        res.status(NOT_FOUND).send({ message: `Id not found: ${err}` });
       } else {
-        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
-    })
-}
+    });
+};
 
 const likeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -43,17 +45,17 @@ const likeCard = (req, res) => {
       error.statusCode = NOT_FOUND;
       throw error;
     })
-    .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }) })
+    .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` })
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
       } else if (err.statusCode === NOT_FOUND) {
-        res.status(NOT_FOUND).send({ message: err.message })
+        res.status(NOT_FOUND).send({ message: err.message });
       } else {
-        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
     });
-}
+};
 
 const dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -66,16 +68,18 @@ const dislikeCard = (req, res) => {
       error.statusCode = NOT_FOUND;
       throw error;
     })
-    .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }) })
+    .then((card) => { res.status(REQUEST_SUCCEDED).send({ data: card }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` })
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
       } else if (err.statusCode === NOT_FOUND) {
-        res.status(NOT_FOUND).send({ message: err.message })
+        res.status(NOT_FOUND).send({ message: err.message });
       } else {
-        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
     });
-}
+};
 
-module.exports = { getCards, createCard, deleteCard, likeCard, dislikeCard };
+module.exports = {
+  getCards, createCard, deleteCard, likeCard, dislikeCard,
+};
