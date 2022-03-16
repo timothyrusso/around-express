@@ -5,11 +5,11 @@ const {
 
 const getUsers = (req, res) => User.find({})
   .then((users) => res.status(REQUEST_SUCCEDED).send(users))
-  .catch((err) => res.status(500).send({ message: `An error has occurred on the server: ${err}` }));
+  .catch((err) => res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` }));
 
 const getProfile = (req, res) => {
-  const { id } = req.params;
-  User.findOne({ id })
+  const { userId } = req.params;
+  User.findById(userId)
     .orFail(() => {
       const error = new Error('No user found with that id');
       error.statusCode = NOT_FOUND;
@@ -33,7 +33,7 @@ const createUser = (req, res) => {
     .then((user) => res.status(RESOURCE_CREATED).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(INVALID_DATA).send({ message: `${Object.values(err.errors).map((errors) => errors.message).join(', ')}` });
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
       } else {
         res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
