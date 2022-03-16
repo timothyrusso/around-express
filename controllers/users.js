@@ -1,7 +1,8 @@
 const User = require('../models/user');
+const { REQUEST_SUCCEDED, RESOURCE_CREATED, NOT_FOUND, INVALID_DATA, INTERNAL_SERVER_ERROR } = require('../utils/constants');
 
 const getUsers = (req, res) => User.find({})
-  .then((users) => res.status(200).send(users))
+  .then((users) => res.status(REQUEST_SUCCEDED).send(users))
   .catch(err => res.status(500).send({ message: `An error has occurred on the server: ${err}` }));
 
 const getProfile = (req, res) => {
@@ -9,17 +10,17 @@ const getProfile = (req, res) => {
   User.findOne({ id })
     .orFail(() => {
       const error = new Error('No user found with that id');
-      error.statusCode = 404;
+      error.statusCode = NOT_FOUND;
       throw error;
     })
-    .then((user) => { res.status(200).send({ data: user }) })
+    .then((user) => { res.status(REQUEST_SUCCEDED).send({ data: user }) })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: `Invalid data: ${err}` })
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message })
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` })
+      } else if (err.statusCode === NOT_FOUND) {
+        res.status(NOT_FOUND).send({ message: err.message })
       } else {
-        res.status(500).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
       }
     });
 }
@@ -27,12 +28,12 @@ const getProfile = (req, res) => {
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(201).send({ data: user }))
+    .then((user) => res.status(RESOURCE_CREATED).send({ data: user }))
     .catch(err => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: `${Object.values(err.errors).map((errors) => errors.message).join(', ')}` })
+        res.status(INVALID_DATA).send({ message: `${Object.values(err.errors).map((errors) => errors.message).join(', ')}` })
       } else {
-        res.status(500).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
       }
     });
 }
@@ -50,17 +51,17 @@ const updateProfile = (req, res) => {
   )
     .orFail(() => {
       const error = new Error('No user found with that id');
-      error.statusCode = 404;
+      error.statusCode = NOT_FOUND;
       throw error;
     })
-    .then((user) => { res.status(200).send({ data: user }) })
+    .then((user) => { res.status(REQUEST_SUCCEDED).send({ data: user }) })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: `Invalid data: ${err}` })
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message })
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` })
+      } else if (err.statusCode === NOT_FOUND) {
+        res.status(NOT_FOUND).send({ message: err.message })
       } else {
-        res.status(500).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
       }
     });
 }
@@ -74,17 +75,17 @@ const updateAvatar = (req, res) => {
   )
     .orFail(() => {
       const error = new Error('No user found with that id');
-      error.statusCode = 404;
+      error.statusCode = NOT_FOUND;
       throw error;
     })
-    .then((user) => { res.status(200).send({ data: user }) })
+    .then((user) => { res.status(REQUEST_SUCCEDED).send({ data: user }) })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: `Invalid data: ${err}` })
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message })
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` })
+      } else if (err.statusCode === NOT_FOUND) {
+        res.status(NOT_FOUND).send({ message: err.message })
       } else {
-        res.status(500).send({ message: `An error has occurred on the server: ${err}` })
+        res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` })
       }
     });
 }
