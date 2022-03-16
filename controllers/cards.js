@@ -15,7 +15,7 @@ const createCard = (req, res) => {
     .then((card) => res.status(RESOURCE_CREATED).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(INVALID_DATA).send({ message: `${Object.values(err.errors).map((errors) => errors.message).join(', ')}` });
+        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
       } else {
         res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
