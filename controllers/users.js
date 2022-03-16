@@ -18,7 +18,7 @@ const getProfile = (req, res) => {
     .then((user) => { res.status(REQUEST_SUCCEDED).send({ data: user }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
+        res.status(INVALID_DATA).send({ message: 'Invalid user ID' });
       } else if (err.statusCode === NOT_FOUND) {
         res.status(NOT_FOUND).send({ message: err.message });
       } else {
@@ -33,7 +33,7 @@ const createUser = (req, res) => {
     .then((user) => res.status(RESOURCE_CREATED).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
+        res.status(INVALID_DATA).send({ message: 'Invalid user data' });
       } else {
         res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
@@ -59,7 +59,7 @@ const updateProfile = (req, res) => {
     .then((user) => { res.status(REQUEST_SUCCEDED).send({ data: user }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
+        res.status(INVALID_DATA).send({ message: 'Invalid user ID' });
       } else if (err.statusCode === NOT_FOUND) {
         res.status(NOT_FOUND).send({ message: err.message });
       } else {
@@ -83,7 +83,7 @@ const updateAvatar = (req, res) => {
     .then((user) => { res.status(REQUEST_SUCCEDED).send({ data: user }); })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(INVALID_DATA).send({ message: `Invalid data: ${err}` });
+        res.status(INVALID_DATA).send({ message: 'Invalid user ID' });
       } else if (err.statusCode === NOT_FOUND) {
         res.status(NOT_FOUND).send({ message: err.message });
       } else {
