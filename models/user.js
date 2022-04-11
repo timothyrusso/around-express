@@ -16,11 +16,25 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    required: true,
+    required: [true, 'url required'],
     validate: {
       validator: (v) => validator.isURL(v),
       message: 'This field must be a link.',
     },
+  },
+  email: {
+    type: String,
+    required: [true, 'email required'],
+    unique: true,
+    validate: {
+      validator: (v) => validator.isEmail(v),
+      message: 'This field must be an email.',
+    },
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8
   },
 });
 
