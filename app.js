@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const routes = require('./routes');
+const auth = require('./middleware/auth');
 const { mongoDbAdress, limiter } = require('./utils/constants');
 const {
   createUser, login,
@@ -22,16 +23,11 @@ app.use(express.json()); // To parse the incoming requests with JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 app.use(helmet());
-app.use((req, res, next) => {
-  req.user = {
-    _id: '622ed7d40a0ec70d1d60d89e',
-  };
-
-  next();
-});
 
 app.post('/signup', createUser);
 app.post('/signin', login);
+
+app.use(auth);
 
 app.use(routes);
 
