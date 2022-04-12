@@ -30,7 +30,15 @@ const getProfile = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
-  User.create({ name, about, avatar, email, password })
+  // hashing the password
+  bcrypt.hash(password, 10)
+    .then(hash => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash, // adding the hash to the database
+    }))
     .then((user) => res.status(RESOURCE_CREATED).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
