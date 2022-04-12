@@ -3,6 +3,9 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const routes = require('./routes');
 const { mongoDbAdress, limiter } = require('./utils/constants');
+const {
+  createUser, login,
+} = require('./controllers/users');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -26,6 +29,9 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.post('/signup', createUser);
+app.post('/signin', login);
 
 app.use(routes);
 
