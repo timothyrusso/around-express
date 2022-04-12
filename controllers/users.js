@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const {
   REQUEST_SUCCEDED, RESOURCE_CREATED, NOT_FOUND, INVALID_DATA, INTERNAL_SERVER_ERROR,
 } = require('../utils/constants');
@@ -98,6 +99,24 @@ const updateAvatar = (req, res) => {
       } else {
         res.status(INTERNAL_SERVER_ERROR).send({ message: `An error has occurred on the server: ${err}` });
       }
+    });
+};
+
+const userLogin = (req, res) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        'some-secret-key',
+        { expiresIn: '7d' }
+      );
+      res.send({ token });
+    })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
     });
 };
 
